@@ -1,8 +1,8 @@
 # Dragan: Collect The Projects
 
 Este un joc horror de tip survivor ce se petrece in interiorul facultatii de matematica si informatica.
-Ideea jocului e sa colectezi 8 proiecte autocad, inainte de a te prinde Dragan.
-O sa existe dificultati diferite, personaje care te ajuta si va exista si posibilitatea de a-l infrange pe Dragan. 
+Ideea jocului e sa colectezi 6 proiecte autocad, inainte de a te prinde Dragan.
+Va exista si posibilitatea de a-l infrange pe Dragan. 
 Sper sa ma inteleg cu Unreal Engine-ul :).
 
 ### Tema 0
