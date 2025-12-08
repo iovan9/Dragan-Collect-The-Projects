@@ -24,6 +24,34 @@ void ADraganFullAI::Tick(float DeltaTime)
     APawn* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
     if (!Player) return;
 
+    if (CurrentState == EDraganState::ATTACKING)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("ATTACK STATE REACHED"));
+        GetCharacterMovement()->DisableMovement();
+
+        if (!bHasAttacked)
+        {
+            bHasAttacked = true;
+
+            if (UPlayerStatsComponent* Stats = Player->FindComponentByClass<UPlayerStatsComponent>())
+            {
+                Stats->ApplyDamage(AttackDamage);
+                UE_LOG(LogTemp, Warning, TEXT("Player HP: %f"), Stats->HP);
+            }
+
+            GetWorld()->GetTimerManager().SetTimer(
+                AttackResetTimer,
+                this,
+                &ADraganFullAI::FinishAttack,
+                4.0f,
+                false
+            );
+        }
+
+        return;
+    }
+
+
     FVector MyLoc = GetActorLocation();
     FVector PlayerLoc = Player->GetActorLocation();
     FVector ToPlayer = PlayerLoc - MyLoc;
@@ -70,37 +98,6 @@ void ADraganFullAI::Tick(float DeltaTime)
         return;
     }
     
-    if (CurrentState == EDraganState::ATTACKING)
-    {
-        // oprește mișcarea complet
-        GetCharacterMovement()->DisableMovement();
-
-        if (!bHasAttacked)
-        {
-            bHasAttacked = true;
-
-            if (Player)
-            {
-                if (auto* Stats = Cast<UPlayerStatsComponent>(Player->FindComponentByClass<UActorComponent>()))
-                {
-                    Stats->ApplyDamage(AttackDamage);
-                    UE_LOG(LogTemp, Warning, TEXT("Dynamic cast reușit → aplic damage prin component!"));
-                }
-
-            }
-
-            // stă 4 secunde după atac → Idle/Recovery
-            GetWorld()->GetTimerManager().SetTimer(
-                AttackResetTimer,
-                this,
-                &ADraganFullAI::FinishAttack,
-                4.0f,
-                false
-            );
-        }
-
-        return; // nu continuă restul logicii
-    }
 
 
 }
